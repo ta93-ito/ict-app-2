@@ -7,7 +7,7 @@ class EventSchedulingApp:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Event Scheduling App")
-        self.window.geometry("600x400")
+        self.window.geometry("700x500")
         self.event_data = {}
         self.responses = {}
         self.create_event_screen()
@@ -70,6 +70,7 @@ class EventSchedulingApp:
         self.event_data['title'] = title
         self.event_data['dates'] = self.selected_dates
         self.participant_input_screen()
+
     def participant_input_screen(self):
         for widget in self.window.winfo_children():
             widget.destroy()
@@ -80,9 +81,15 @@ class EventSchedulingApp:
 
         self.date_vars = {}
         for date in self.event_data['dates']:
-            var = tk.BooleanVar()
+            frame = tk.Frame(self.window)
+            tk.Label(frame, text=date).pack(side=tk.LEFT)
+
+            var = tk.StringVar(value='×')  # デフォルト値を「×」に設定
             self.date_vars[date] = var
-            tk.Checkbutton(self.window, text=date, variable=var).pack()
+            tk.Radiobutton(frame, text="○", variable=var, value='○').pack(side=tk.LEFT)
+            tk.Radiobutton(frame, text="×", variable=var, value='×').pack(side=tk.LEFT)
+
+            frame.pack()
 
         tk.Button(self.window, text="Submit Response", command=self.submit_response).pack()
         tk.Button(self.window, text="Show Results", command=self.show_results).pack()
@@ -90,10 +97,9 @@ class EventSchedulingApp:
     def submit_response(self):
         name = self.participant_name_entry.get()
         if not name:
-            messagebox.showerror("Error", "Please enter your name.")
+            messagebox.showerror("Error","Please enter your name.")
             return
-
-        response = {date: self.date_vars[date].get() for date in self.event_data['dates']}
+        response = {date: self.date_vars[date].get() == '○' for date in self.event_data['dates']}
         self.responses[name] = response
 
         messagebox.showinfo("Success", "Response submitted successfully!")

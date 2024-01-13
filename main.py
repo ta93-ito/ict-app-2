@@ -20,7 +20,6 @@ class EventSchedulingApp:
         self.event_title_entry.pack()
 
         tk.Label(self.window, text="Select Dates:").pack()
-        # カレンダーのフォント色を変更し、週番号を非表示に設定
         self.calendar = Calendar(self.window, selectmode='day', font="Arial 14", 
                                  normalforeground='black', weekendforeground='red', 
                                  othermonthforeground='gray', othermonthwebackground='white',
@@ -40,7 +39,21 @@ class EventSchedulingApp:
         date = self.calendar.get_date()
         if date not in self.selected_dates:
             self.selected_dates.append(date)
-            tk.Label(self.dates_frame, text=date).pack()
+            self.refresh_dates_frame()
+
+    def refresh_dates_frame(self):
+        for widget in self.dates_frame.winfo_children():
+            widget.destroy()
+
+        for date in self.selected_dates:
+            date_frame = tk.Frame(self.dates_frame)
+            tk.Label(date_frame, text=date).pack(side=tk.LEFT)
+            tk.Button(date_frame, text="Delete", command=lambda d=date: self.delete_date(d)).pack(side=tk.LEFT)
+            date_frame.pack()
+
+    def delete_date(self, date):
+        self.selected_dates.remove(date)
+        self.refresh_dates_frame()
 
     def start_scheduling(self):
         title = self.event_title_entry.get()
@@ -51,7 +64,6 @@ class EventSchedulingApp:
         self.event_data['title'] = title
         self.event_data['dates'] = self.selected_dates
         self.participant_input_screen()
-
     def participant_input_screen(self):
         for widget in self.window.winfo_children():
             widget.destroy()
@@ -90,6 +102,7 @@ class EventSchedulingApp:
         
         for date, count in date_counts.items():
             tk.Label(self.window, text=f"{date}: {count} participants").pack()
+
         max_date = max(date_counts, key=date_counts.get, default=None)
         if max_date is not None:
             tk.Label(self.window, text=f"Best date: {max_date} with {date_counts[max_date]} participants").pack()
@@ -103,5 +116,5 @@ class EventSchedulingApp:
         self.window.mainloop()
 
 if __name__ == "__main__":
-    app = EventSchedulingApp()
-    app.start()
+  app = EventSchedulingApp()
+  app.start()

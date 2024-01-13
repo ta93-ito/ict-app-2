@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkcalendar import Calendar
+from datetime import datetime
 
 class EventSchedulingApp:
     def __init__(self):
@@ -37,9 +38,14 @@ class EventSchedulingApp:
 
     def add_date(self):
         date = self.calendar.get_date()
-        if date not in self.selected_dates:
-            self.selected_dates.append(date)
+        formatted_date = self.format_date(date)
+        if formatted_date not in self.selected_dates:
+            self.selected_dates.append(formatted_date)
             self.refresh_dates_frame()
+
+    def format_date(self, date_str):
+        date_obj = datetime.strptime(date_str, '%Y/%m/%d')
+        return date_obj.strftime('%Y年%m月%d日')
 
     def refresh_dates_frame(self):
         for widget in self.dates_frame.winfo_children():

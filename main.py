@@ -84,7 +84,7 @@ class EventSchedulingApp:
             frame = tk.Frame(self.window)
             tk.Label(frame, text=date).pack(side=tk.LEFT)
 
-            var = tk.StringVar(value='×')  # デフォルト値を「×」に設定
+            var = tk.StringVar(value='×')
             self.date_vars[date] = var
             tk.Radiobutton(frame, text="○", variable=var, value='○').pack(side=tk.LEFT)
             tk.Radiobutton(frame, text="×", variable=var, value='×').pack(side=tk.LEFT)

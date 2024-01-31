@@ -1,3 +1,5 @@
+# ref: https://github.com/ta93-ito/ict-app-2/tree/main/scheduler
+
 import tkinter as tk
 from tkinter import messagebox
 from tkcalendar import Calendar
